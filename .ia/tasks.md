@@ -13,7 +13,7 @@
 - [x] Configurar `WorkManager` y `NotificationHelper.kt` para recordatorios.
 - [x] Crear `MainActivity.kt` con `setContent { AppNavigation() }`.
 - [x] Implementar `AppNavigation.kt` en `/navigation/` con rutas `"list"` y `"detail/{plantId}"`.
-- [ ] Configurar tema Compose: crear `/ui/theme/Color.kt`, `Typography.kt`, `Theme.kt`.
+- [x] Configurar tema Compose: verificar `/ui/theme/Color.kt`, `Type.kt`, `Theme.kt`.
 
 ---
 
