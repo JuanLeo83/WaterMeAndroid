@@ -1,5 +1,8 @@
 ## 📝 **Notas de Contexto y Desarrollo**
-> **Instrucción del desarrollador**: Cualquier decisión importante, tarea no contemplada, aclaración de ambigüedades, o cambio significativo durante el desarrollo debe ser documentado aquí para futuras sesiones.
+> **Instrucción del desarrollador**: 
+- Cualquier decisión importante, tarea no contemplada, aclaración de ambigüedades, o cambio significativo durante el desarrollo debe ser documentado aquí para futuras sesiones.
+- Cada vez que finalices una tarea debes preguntar si lo que has hecho es correcto e indicar qué se debe probar en caso de ser necesario.
+- Cuando el desarrollador diga que todo está correcto, procede a hacer commit de la tarea y continua con la siguiente de la lista.
 
 ### **Decisiones de Implementación:**
 - **Inyección de Dependencias con Koin** (15/11/2025): Se decidió usar Koin para DI siguiendo principios SOLID. Todos los componentes principales serán inyectados. Se creará `WaterMeApplication.kt` para inicializar Koin y `/di/AppModule.kt` para definir los módulos.

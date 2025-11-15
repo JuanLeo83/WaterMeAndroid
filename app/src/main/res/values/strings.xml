@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">WaterMe</string>
+    
+    <!-- Validation errors -->
+    <string name="error_name_required">Name is required</string>
+    <string name="error_last_watering_required">Last watering is required</string>
+    <string name="error_last_watering_must_be_number">Must be a number</string>
+    <string name="error_last_watering_cannot_be_negative">Cannot be negative</string>
+    <string name="error_last_watering_max_days">Cannot exceed 90 days</string>
+    <string name="error_frequency_min_days">Frequency must be at least 1 day</string>
+    <string name="error_frequency_max_days">Frequency cannot exceed 90 days</string>
+    <string name="error_saving_plant">Error saving plant: %1$s</string>
 </resources>
