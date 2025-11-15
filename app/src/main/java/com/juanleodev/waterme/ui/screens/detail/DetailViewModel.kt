@@ -18,6 +18,10 @@ class DetailViewModel(
 
     private val _state = MutableStateFlow(DetailState())
     val state: StateFlow<DetailState> = _state.asStateFlow()
+    
+    fun resetForNewPlant() {
+        _state.value = DetailState()
+    }
 
     fun handleIntent(intent: DetailIntent) {
         when (intent) {
@@ -84,7 +88,7 @@ class DetailViewModel(
                     reminderTime = currentState.reminderTime,
                     lastWateringDate = lastWateringDate
                 )
-
+                
                 repository.insertPlant(plant)
                 
                 _state.update { 

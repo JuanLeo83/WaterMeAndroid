@@ -47,6 +47,13 @@ fun PlantDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     
+    // Reset ViewModel state for new plants
+    LaunchedEffect(plantId) {
+        if (plantId == -1L) {
+            viewModel.resetForNewPlant()
+        }
+    }
+    
     // Navigate back when plant is saved successfully
     LaunchedEffect(state.isSaved) {
         if (state.isSaved) {
@@ -94,6 +101,7 @@ private fun PlantDetailContent(
                     onValueChange = { onIntent(DetailIntent.UpdateName(it)) },
                     label = { Text(stringResource(R.string.plant_name_label)) },
                     placeholder = { Text(stringResource(R.string.plant_name_hint)) },
+                    singleLine = true,
                     isError = state.nameError != null,
                     supportingText = {
                         state.nameError?.let { errorRes ->

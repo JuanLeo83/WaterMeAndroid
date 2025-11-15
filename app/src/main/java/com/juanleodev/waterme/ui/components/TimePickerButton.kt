@@ -1,16 +1,19 @@
 package com.juanleodev.waterme.ui.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDialog
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,12 +30,13 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 /**
- * Dumb component for selecting reminder time.
+ * Enhanced TimePickerButton component using Material3 native TimePicker.
  * 
  * @param selectedTime Current selected time
  * @param onTimeSelected Callback when time is selected
  * @param modifier Optional modifier
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerButton(
     selectedTime: LocalTime,
@@ -40,6 +44,13 @@ fun TimePickerButton(
     modifier: Modifier = Modifier
 ) {
     var showTimePicker by remember { mutableStateOf(false) }
+    
+    // Initialize TimePicker state with current selected time
+    val timePickerState = rememberTimePickerState(
+        initialHour = selectedTime.hour,
+        initialMinute = selectedTime.minute,
+        is24Hour = true
+    )
     
     Column(modifier = modifier) {
         Text(
@@ -68,62 +79,51 @@ fun TimePickerButton(
             }
         }
         
+        // Native Material3 TimePicker Dialog
         if (showTimePicker) {
-            // TODO: In a real app, this would show a proper time picker dialog
-            // For now, we'll use a simple implementation
             TimePickerDialog(
-                initialTime = selectedTime,
-                onTimeSelected = { time ->
-                    onTimeSelected(time)
+                onCancel = { showTimePicker = false },
+                onConfirm = {
+                    onTimeSelected(
+                        LocalTime.of(
+                            timePickerState.hour,
+                            timePickerState.minute
+                        )
+                    )
                     showTimePicker = false
-                },
-                onDismiss = { showTimePicker = false }
-            )
+                }
+            ) {
+                TimePicker(
+                    state = timePickerState,
+                )
+            }
         }
     }
 }
 
 /**
- * Simple time picker dialog implementation.
- * In a production app, this could use Material3's TimePicker component.
+ * Custom TimePickerDialog since Material3 might not have it in all versions
  */
 @Composable
 private fun TimePickerDialog(
-    initialTime: LocalTime,
-    onTimeSelected: (LocalTime) -> Unit,
-    onDismiss: () -> Unit
+    onCancel: () -> Unit,
+    onConfirm: () -> Unit,
+    content: @Composable () -> Unit
 ) {
-    // For MVP, we'll provide some preset times
-    val presetTimes = listOf(
-        LocalTime.of(7, 0),
-        LocalTime.of(8, 0),
-        LocalTime.of(9, 0),
-        LocalTime.of(10, 0),
-        LocalTime.of(12, 0),
-        LocalTime.of(18, 0),
-        LocalTime.of(20, 0)
-    )
-    
-    // Simple dialog implementation - in production, use AlertDialog
-    Box {
-        Column {
-            Text(stringResource(R.string.select_reminder_time))
-            presetTimes.forEach { time ->
-                Button(
-                    onClick = { onTimeSelected(time) },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(time.format(DateTimeFormatter.ofPattern("HH:mm")))
-                }
-            }
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onCancel,
+        dismissButton = {
+            TextButton(onClick = onCancel) {
                 Text(stringResource(R.string.cancel))
             }
-        }
-    }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.ok))
+            }
+        },
+        text = { content() }
+    )
 }
 
 @Preview(showBackground = true)

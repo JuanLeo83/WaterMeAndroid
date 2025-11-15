@@ -13,13 +13,25 @@
     
     <!-- Photo picker -->
     <string name="add_photo_optional">Add Photo (Optional)</string>
-    <string name="photo_placeholder">Photo Selected</string>
+    <string name="photo_selected">Photo Selected</string>
     <string name="plant_photo_content_description">Plant photo</string>
+    <string name="select_photo_option">Select Photo</string>
+    <string name="choose_photo_source">Choose how you want to add a photo</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_gallery">Choose from Gallery</string>
     
     <!-- Time picker -->
     <string name="select_time_content_description">Select reminder time</string>
     <string name="select_reminder_time">Select Reminder Time</string>
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    
+    <!-- Permissions -->
+    <string name="permission_required">Permission Required</string>
+    <string name="camera_permission_explanation">Camera permission is needed to take photos of your plants. Please enable it in settings.</string>
+    <string name="gallery_permission_explanation">Gallery permission is needed to select photos from your device. Please enable it in settings.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="delete_photo">Delete photo</string>
     
     <!-- Plurals for days -->
     <plurals name="days_count">
