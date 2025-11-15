@@ -3,6 +3,7 @@
 
 ### **Decisiones de Implementación:**
 - **Inyección de Dependencias con Koin** (15/11/2025): Se decidió usar Koin para DI siguiendo principios SOLID. Todos los componentes principales serán inyectados. Se creará `WaterMeApplication.kt` para inicializar Koin y `/di/AppModule.kt` para definir los módulos.
+- **Versión de Kotlin 2.1.0** (15/11/2025): Se mantiene Kotlin 2.1.0 en lugar de la más reciente 2.2.21 debido a que KSP aún no tiene una versión estable compatible con Kotlin 2.2.21. La combinación estable es: Kotlin 2.1.0 + KSP 2.1.0-1.0.29 + Room 2.8.3. Se verificó que las versiones KSP 2.2.21-1.0.30 y 2.0.21-1.0.29 no existen en los repositorios.
 
 ### **Tareas Adicionales Identificadas:**
 - *[Pendiente: añadir tareas no contempladas inicialmente]*
