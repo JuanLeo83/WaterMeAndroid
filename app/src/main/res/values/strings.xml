@@ -48,4 +48,23 @@
     <string name="error_frequency_min_days">Frequency must be at least 1 day</string>
     <string name="error_frequency_max_days">Frequency cannot exceed 90 days</string>
     <string name="error_saving_plant">Error saving plant: %1$s</string>
+    
+    <!-- Plant list errors -->
+    <string name="error_loading_plants">Unable to load plants</string>
+    <string name="error_watering_plant">Unable to water plant</string>
+    <string name="water_plant">Water</string>
+    <string name="add_new_plant">Add Plant</string>
+    <string name="no_plants_yet">No plants added yet</string>
+    <string name="add_your_first_plant">Add your first plant to get started!</string>
+    <string name="last_watered">Last watered: %1$s</string>
+    <string name="next_watering">Next watering: %1$s</string>
+    <string name="loading_plants">Loading plants...</string>
+    
+    <!-- Watering status -->
+    <string name="watering_status_healthy">Saludable</string>
+    <string name="watering_status_needs_water">Necesita agua</string>
+    <string name="watering_status_overdue">Atrasada</string>
+    <string name="watering_status_healthy_desc">No necesita riego aún</string>
+    <string name="watering_status_needs_water_desc">Necesita ser regada</string>
+    <string name="watering_status_overdue_desc">Debería haber sido regada</string>
 </resources>

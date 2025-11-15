@@ -4,6 +4,7 @@ import com.juanleodev.waterme.data.PlantRepository
 import com.juanleodev.waterme.data.db.AppDatabase
 import com.juanleodev.waterme.service.NotificationHelper
 import com.juanleodev.waterme.ui.screens.detail.DetailViewModel
+import com.juanleodev.waterme.ui.screens.list.PlantListViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -28,5 +29,6 @@ val appModule = module {
     
     // ViewModels
     viewModel { DetailViewModel(get()) }
+    viewModel { PlantListViewModel(get()) }
     
 }

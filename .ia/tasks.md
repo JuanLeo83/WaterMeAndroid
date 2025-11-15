@@ -43,15 +43,15 @@
 
 ---
 
-## 💧 Historia 2: Marcar una planta como regada
+## 💧 Historia 2: Marcar una planta como regada ✅ COMPLETADA
 **Archivos:**  
 `/ui/screens/list/PlantListScreen.kt`, `/ui/components/PlantListItem.kt`
 
-- [ ] En `PlantListItem.kt`, añadir botón “Regar”.
-- [ ] En `PlantListScreen.kt`, manejar `onWatered(plantId)` que actualice `lastWateringDate = hoy`.
-- [ ] Actualizar `PlantRepository` y `PlantDao` para persistir el cambio.
-- [ ] Emitir nuevo estado vía `PlantListViewModel` (`StateFlow`).
-- [ ] Recalcular y actualizar estado de riego (`WateringStatus` → Verde).
+- [x] En `PlantListItem.kt`, añadir botón "Regar".
+- [x] En `PlantListScreen.kt`, manejar `onWatered(plantId)` que actualice `lastWateringDate = hoy`.
+- [x] Actualizar `PlantRepository` y `PlantDao` para persistir el cambio.
+- [x] Emitir nuevo estado vía `PlantListViewModel` (`StateFlow`).
+- [x] Recalcular y actualizar estado de riego (`WateringStatus` → Verde).
 
 ---
 
