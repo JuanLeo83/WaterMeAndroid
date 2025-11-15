@@ -1,6 +1,32 @@
 <resources>
     <string name="app_name">WaterMe</string>
     
+    <!-- Form labels -->
+    <string name="plant_name_label">Plant Name</string>
+    <string name="plant_name_hint">Enter plant name</string>
+    <string name="photo_label">Photo (Optional)</string>
+    <string name="frequency_label">Watering Frequency</string>
+    <string name="reminder_time_label">Reminder Time</string>
+    <string name="last_watering_label">Last Watering</string>
+    <string name="last_watering_hint">Days ago (0 = today)</string>
+    <string name="save_plant">Save Plant</string>
+    
+    <!-- Photo picker -->
+    <string name="add_photo_optional">Add Photo (Optional)</string>
+    <string name="photo_placeholder">Photo Selected</string>
+    <string name="plant_photo_content_description">Plant photo</string>
+    
+    <!-- Time picker -->
+    <string name="select_time_content_description">Select reminder time</string>
+    <string name="select_reminder_time">Select Reminder Time</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Plurals for days -->
+    <plurals name="days_count">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    
     <!-- Validation errors -->
     <string name="error_name_required">Name is required</string>
     <string name="error_last_watering_required">Last watering is required</string>

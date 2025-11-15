@@ -9,10 +9,12 @@
 - **Versión de Kotlin 2.1.0** (15/11/2025): Se mantiene Kotlin 2.1.0 en lugar de la más reciente 2.2.21 debido a que KSP aún no tiene una versión estable compatible con Kotlin 2.2.21. La combinación estable es: Kotlin 2.1.0 + KSP 2.1.0-1.0.29 + Room 2.8.3. Se verificó que las versiones KSP 2.2.21-1.0.30 y 2.0.21-1.0.29 no existen en los repositorios.
 
 ### **Tareas Adicionales Identificadas:**
-- *[Pendiente: añadir tareas no contempladas inicialmente]*
+- **Corrección Campo "Last Watering"** (15/11/2025): Se identificó que el campo "Last Watering" no debe ser editable en el formulario de añadir nueva planta. En su lugar, las plantas nuevas usan automáticamente "hoy" como fecha de último riego. El campo solo aparecerá como información de solo lectura en el modo de edición futuro.
 
 ### **Aclaraciones de Ambigüedades:**
-- *[Pendiente: documentar resoluciones de puntos ambiguos]*
+- **Campo "Last Watering" en Añadir vs Editar** (15/11/2025): 
+  - **Añadir Nueva Planta**: No se muestra el campo. Se asume automáticamente que se regó "hoy" (LocalDate.now()).
+  - **Editar Planta (futuro)**: Se mostrará como label informativo con texto relativo: "Last watering: today", "Last watering: yesterday", "Last watering: 4 days ago", "Last watering: never".
 
 ### **Instrucciones de Flujo de Trabajo:**
 - **Flujo de desarrollo incremental**: Trabajar tarea por tarea. Al completar cada tarea, esperar confirmación del desarrollador antes de continuar con la siguiente.

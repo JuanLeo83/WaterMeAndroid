@@ -24,7 +24,6 @@ class DetailViewModel(
             is DetailIntent.UpdateName -> updateName(intent.name)
             is DetailIntent.UpdateFrequency -> updateFrequency(intent.days)
             is DetailIntent.UpdateTime -> updateTime(intent.time)
-            is DetailIntent.UpdateLastWatering -> updateLastWatering(intent.days)
             is DetailIntent.SelectPhoto -> selectPhoto(intent.photoUri)
             DetailIntent.SavePlant -> savePlant()
         }
@@ -42,10 +41,6 @@ class DetailViewModel(
         _state.update { it.copy(reminderTime = time) }
     }
 
-    private fun updateLastWatering(days: String) {
-        _state.update { it.copy(lastWateringDays = days, lastWateringError = null) }
-    }
-
     private fun selectPhoto(photoUri: String?) {
         _state.update { it.copy(photoUri = photoUri) }
     }
@@ -57,15 +52,6 @@ class DetailViewModel(
             R.string.error_name_required
         } else null
         
-        val lastWateringDaysInt = currentState.lastWateringDays.toIntOrNull()
-        val lastWateringError = when {
-            currentState.lastWateringDays.isBlank() -> R.string.error_last_watering_required
-            lastWateringDaysInt == null -> R.string.error_last_watering_must_be_number
-            lastWateringDaysInt < 0 -> R.string.error_last_watering_cannot_be_negative
-            lastWateringDaysInt > 90 -> R.string.error_last_watering_max_days
-            else -> null
-        }
-
         val frequencyError = when {
             currentState.frequency < 1 -> R.string.error_frequency_min_days
             currentState.frequency > 90 -> R.string.error_frequency_max_days
@@ -73,11 +59,10 @@ class DetailViewModel(
         }
 
         // Update state with errors
-        if (nameError != null || lastWateringError != null || frequencyError != null) {
+        if (nameError != null || frequencyError != null) {
             _state.update {
                 it.copy(
                     nameError = nameError,
-                    lastWateringError = lastWateringError,
                     frequencyError = frequencyError
                 )
             }
@@ -89,7 +74,8 @@ class DetailViewModel(
 
         viewModelScope.launch {
             try {
-                val lastWateringDate = LocalDate.now().minusDays(lastWateringDaysInt!!.toLong())
+                // For new plants, default to today as last watering date
+                val lastWateringDate = LocalDate.now()
                 
                 val plant = Plant(
                     name = currentState.name.trim(),
