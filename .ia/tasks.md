@@ -10,7 +10,7 @@
   - [x] Crear `/di/AppModule.kt` con módulos básicos (Database, Repository).
   - [x] Registrar `WaterMeApplication` en `AndroidManifest.xml`.
 - [x] Configurar `Room` (SQLite): revisar o crear `AppDatabase.kt`, `PlantDao.kt`, `Plant.kt`, `PlantRepository.kt`.
-- [ ] Configurar `WorkManager` y `NotificationHelper.kt` para recordatorios.
+- [x] Configurar `WorkManager` y `NotificationHelper.kt` para recordatorios.
 - [ ] Crear `MainActivity.kt` con `setContent { AppNavigation() }`.
 - [ ] Implementar `AppNavigation.kt` en `/navigation/` con rutas `"list"` y `"detail/{plantId}"`.
 - [ ] Configurar tema Compose: crear `/ui/theme/Color.kt`, `Typography.kt`, `Theme.kt`.

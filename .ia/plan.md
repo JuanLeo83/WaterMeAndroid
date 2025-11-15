@@ -15,6 +15,7 @@
 - **Flujo de desarrollo incremental**: Trabajar tarea por tarea. Al completar cada tarea, esperar confirmación del desarrollador antes de continuar con la siguiente.
 - **Gestión de dudas**: Si hay ambigüedades en una tarea, preguntar siempre antes de implementar y documentar la resolución en "Aclaraciones de Ambigüedades".
 - **Verificación de tareas completadas**: Revisar el estado actual del proyecto. Si una tarea ya está implementada, marcarla como realizada y continuar con la siguiente.
+- **Internacionalización (i18n)**: Todos los textos que se muestren al usuario (interfaz, accesibilidad, notificaciones) deben incluirse en el archivo `strings.xml`. No usar strings hardcodeados en el código. En el futuro se añadirán traducciones a otros idiomas.
 
 # Plan: Gestión de Riego de Plantas
 

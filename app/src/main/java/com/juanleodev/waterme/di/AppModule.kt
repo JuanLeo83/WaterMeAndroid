@@ -2,6 +2,7 @@ package com.juanleodev.waterme.di
 
 import com.juanleodev.waterme.data.PlantRepository
 import com.juanleodev.waterme.data.db.AppDatabase
+import com.juanleodev.waterme.service.NotificationHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -19,6 +20,9 @@ val appModule = module {
     
     // Repositories
     single { PlantRepository(get()) }
+    
+    // Services
+    single { NotificationHelper(androidContext()) }
     
     // ViewModels will be added here
     // Example: viewModel { PlantListViewModel(get()) }
