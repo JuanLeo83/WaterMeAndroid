@@ -17,6 +17,68 @@
 - **Verificación de tareas completadas**: Revisar el estado actual del proyecto. Si una tarea ya está implementada, marcarla como realizada y continuar con la siguiente.
 - **Internacionalización (i18n)**: Todos los textos que se muestren al usuario (interfaz, accesibilidad, notificaciones) deben incluirse en el archivo `strings.xml`. No usar strings hardcodeados en el código. En el futuro se añadirán traducciones a otros idiomas.
 
+### **Guías de Estilo de Código:**
+
+#### **Nomenclatura de Archivos:**
+- **Cada pantalla tiene su propia carpeta**: Organizar por feature/pantalla en `/ui/screens/<feature>/`
+- **Nomenclatura basada en la feature**: Todos los archivos dentro de la carpeta de una pantalla deben nombrase según la feature, seguido del tipo de archivo.
+- **Ejemplos**:
+  - `/ui/screens/detail/DetailScreen.kt` - Composable de la pantalla
+  - `/ui/screens/detail/DetailViewModel.kt` - ViewModel
+  - `/ui/screens/detail/DetailState.kt` - Data class para el estado UI
+  - `/ui/screens/detail/DetailIntent.kt` - Sealed class/interface para las intenciones
+  - `/ui/screens/list/ListScreen.kt`
+  - `/ui/screens/list/ListViewModel.kt`
+  - `/ui/screens/list/ListState.kt`
+
+#### **Patrón de Arquitectura de Presentación (MVI - Model-View-Intent):**
+- **ViewModel**: Debe exponer una función `handleIntent(intent: <Feature>Intent)` que procese todas las acciones de usuario.
+- **Estado Unidireccional**: El ViewModel expone un único `StateFlow<FeatureState>` que representa todo el estado de la pantalla.
+- **La UI solo reacciona al estado**: Los Composables observan el StateFlow y se recomponen cuando el estado cambia.
+- **Intenciones (Intents)**: Toda acción del usuario se modela como una sealed class/interface que representa la intención (ej. `SavePlant`, `UpdateName`, `SelectPhoto`).
+- **Estructura típica**:
+  ```kotlin
+  // DetailIntent.kt
+  sealed interface DetailIntent {
+      data class UpdateName(val name: String) : DetailIntent
+      data class UpdateFrequency(val days: Int) : DetailIntent
+      data object SavePlant : DetailIntent
+  }
+  
+  // DetailState.kt
+  data class DetailState(
+      val name: String = "",
+      val frequency: Int = 7,
+      val isLoading: Boolean = false,
+      val error: String? = null
+  )
+  
+  // DetailViewModel.kt
+  class DetailViewModel : ViewModel() {
+      private val _state = MutableStateFlow(DetailState())
+      val state: StateFlow<DetailState> = _state.asStateFlow()
+      
+      fun handleIntent(intent: DetailIntent) {
+          when (intent) {
+              is DetailIntent.UpdateName -> _state.update { it.copy(name = intent.name) }
+              is DetailIntent.SavePlant -> savePlant()
+              // ...
+          }
+      }
+  }
+  
+  // DetailScreen.kt
+  @Composable
+  fun DetailScreen(viewModel: DetailViewModel = koinViewModel()) {
+      val state by viewModel.state.collectAsStateWithLifecycle()
+      
+      DetailContent(
+          state = state,
+          onIntent = viewModel::handleIntent
+      )
+  }
+  ```
+
 # Plan: Gestión de Riego de Plantas
 
 **Spec de Referencia**: Spec: Gestión de Riego de Plantas (./spec.md)
@@ -76,12 +138,16 @@
 │   │
 │   ├── /screens
 │   │   ├── /list
-│   │   │   ├── PlantListScreen.kt
-│   │   │   └── PlantListViewModel.kt
+│   │   │   ├── ListScreen.kt
+│   │   │   ├── ListViewModel.kt
+│   │   │   ├── ListState.kt
+│   │   │   └── ListIntent.kt
 │   │   │
 │   │   └── /detail
-│   │       ├── PlantDetailScreen.kt
-│   │       └── PlantDetailViewModel.kt
+│   │       ├── DetailScreen.kt
+│   │       ├── DetailViewModel.kt
+│   │       ├── DetailState.kt
+│   │       └── DetailIntent.kt
 │   │
 │   ├── /navigation
 │   │   └── AppNavigation.kt
