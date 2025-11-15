@@ -64,6 +64,9 @@ dependencies {
     // WorkManager for Background Tasks
     implementation(libs.androidx.work.runtime.ktx)
     
+    // Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
