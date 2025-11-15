@@ -17,29 +17,29 @@
 
 ---
 
-## 🌱 Historia 1: Añadir una nueva planta
+## 🌱 Historia 1: Añadir una nueva planta ✅ COMPLETADA
 **Archivos:**  
 `/ui/screens/detail/PlantDetailScreen.kt`  
 `/ui/screens/detail/PlantDetailViewModel.kt`  
 `/ui/components/PhotoPicker.kt`, `/ui/components/FrequencySlider.kt`, `/ui/components/TimePickerButton.kt`
 
-- [ ] Crear `PlantDetailScreen.kt` (Composable "stateful") con campos:
-  - [ ] Nombre (TextField obligatorio)
-  - [ ] Foto opcional (`PhotoPicker`)
-  - [ ] Frecuencia (`FrequencySlider`)
-  - [ ] Hora (`TimePickerButton`)
-  - [ ] Último riego (TextField numérico)
-  - [ ] Botón “Guardar”
-- [ ] Implementar validaciones de entrada (frecuencia 1–90, último riego 0–90).
-- [ ] Añadir lógica de "0 = Hoy" para último riego.
-- [ ] En `PlantDetailViewModel.kt`:
-  - [ ] Crear método `savePlant()` que calcule `nextWateringDate = lastWateringDate + frequency`.
-  - [ ] Persistir la nueva planta en `PlantRepository`.
-- [ ] Añadir navegación desde `"list"` a `"detail"` al pulsar “Añadir Planta” (`AppNavigation.kt`).
-- [ ] Crear composables “dumb”:
-  - [ ] `PhotoPicker.kt` (selección de imagen opcional)
-  - [ ] `FrequencySlider.kt` (selector 1–90 días)
-  - [ ] `TimePickerButton.kt` (selector de hora)
+- [x] Crear `PlantDetailScreen.kt` (Composable "stateful") con campos:
+  - [x] Nombre (TextField obligatorio)
+  - [x] Foto opcional (`PhotoPicker`)
+  - [x] Frecuencia (`FrequencySlider`)
+  - [x] Hora (`TimePickerButton`)
+  - [x] Último riego (TextField numérico)
+  - [x] Botón "Guardar"
+- [x] Implementar validaciones de entrada (frecuencia 1–90, último riego 0–90).
+- [x] Añadir lógica de "0 = Hoy" para último riego.
+- [x] En `PlantDetailViewModel.kt`:
+  - [x] Crear método `savePlant()` que calcule `nextWateringDate = lastWateringDate + frequency`.
+  - [x] Persistir la nueva planta en `PlantRepository`.
+- [x] Añadir navegación desde `"list"` a `"detail"` al pulsar "Añadir Planta" (`AppNavigation.kt`).
+- [x] Crear composables "dumb":
+  - [x] `PhotoPicker.kt` (selección de imagen opcional)
+  - [x] `FrequencySlider.kt` (selector 1–90 días)
+  - [x] `TimePickerButton.kt` (selector de hora)
 
 ---
 

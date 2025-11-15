@@ -1,21 +1,88 @@
 ## 📝 **Notas de Contexto y Desarrollo**
-> **Instrucción del desarrollador**: Cualquier decisión importante, tarea no contemplada, aclaración de ambigüedades, o cambio significativo durante el desarrollo debe ser documentado aquí para futuras sesiones.
+> **Instrucción del desarrollador**: 
+- Cualquier decisión importante, tarea no contemplada, aclaración de ambigüedades, o cambio significativo durante el desarrollo debe ser documentado aquí para futuras sesiones.
+- Cada vez que finalices una tarea debes preguntar si lo que has hecho es correcto e indicar qué se debe probar en caso de ser necesario.
+- Cuando el desarrollador diga que todo está correcto, procede a hacer commit de la tarea y continua con la siguiente de la lista.
 
 ### **Decisiones de Implementación:**
 - **Inyección de Dependencias con Koin** (15/11/2025): Se decidió usar Koin para DI siguiendo principios SOLID. Todos los componentes principales serán inyectados. Se creará `WaterMeApplication.kt` para inicializar Koin y `/di/AppModule.kt` para definir los módulos.
 - **Versión de Kotlin 2.1.0** (15/11/2025): Se mantiene Kotlin 2.1.0 en lugar de la más reciente 2.2.21 debido a que KSP aún no tiene una versión estable compatible con Kotlin 2.2.21. La combinación estable es: Kotlin 2.1.0 + KSP 2.1.0-1.0.29 + Room 2.8.3. Se verificó que las versiones KSP 2.2.21-1.0.30 y 2.0.21-1.0.29 no existen en los repositorios.
 
 ### **Tareas Adicionales Identificadas:**
-- *[Pendiente: añadir tareas no contempladas inicialmente]*
+- **Corrección Campo "Last Watering"** (15/11/2025): Se identificó que el campo "Last Watering" no debe ser editable en el formulario de añadir nueva planta. En su lugar, las plantas nuevas usan automáticamente "hoy" como fecha de último riego. El campo solo aparecerá como información de solo lectura en el modo de edición futuro.
 
 ### **Aclaraciones de Ambigüedades:**
-- *[Pendiente: documentar resoluciones de puntos ambiguos]*
+- **Campo "Last Watering" en Añadir vs Editar** (15/11/2025): 
+  - **Añadir Nueva Planta**: No se muestra el campo. Se asume automáticamente que se regó "hoy" (LocalDate.now()).
+  - **Editar Planta (futuro)**: Se mostrará como label informativo con texto relativo: "Last watering: today", "Last watering: yesterday", "Last watering: 4 days ago", "Last watering: never".
 
 ### **Instrucciones de Flujo de Trabajo:**
 - **Flujo de desarrollo incremental**: Trabajar tarea por tarea. Al completar cada tarea, esperar confirmación del desarrollador antes de continuar con la siguiente.
 - **Gestión de dudas**: Si hay ambigüedades en una tarea, preguntar siempre antes de implementar y documentar la resolución en "Aclaraciones de Ambigüedades".
 - **Verificación de tareas completadas**: Revisar el estado actual del proyecto. Si una tarea ya está implementada, marcarla como realizada y continuar con la siguiente.
 - **Internacionalización (i18n)**: Todos los textos que se muestren al usuario (interfaz, accesibilidad, notificaciones) deben incluirse en el archivo `strings.xml`. No usar strings hardcodeados en el código. En el futuro se añadirán traducciones a otros idiomas.
+
+### **Guías de Estilo de Código:**
+
+#### **Nomenclatura de Archivos:**
+- **Cada pantalla tiene su propia carpeta**: Organizar por feature/pantalla en `/ui/screens/<feature>/`
+- **Nomenclatura basada en la feature**: Todos los archivos dentro de la carpeta de una pantalla deben nombrase según la feature, seguido del tipo de archivo.
+- **Ejemplos**:
+  - `/ui/screens/detail/DetailScreen.kt` - Composable de la pantalla
+  - `/ui/screens/detail/DetailViewModel.kt` - ViewModel
+  - `/ui/screens/detail/DetailState.kt` - Data class para el estado UI
+  - `/ui/screens/detail/DetailIntent.kt` - Sealed class/interface para las intenciones
+  - `/ui/screens/list/ListScreen.kt`
+  - `/ui/screens/list/ListViewModel.kt`
+  - `/ui/screens/list/ListState.kt`
+
+#### **Patrón de Arquitectura de Presentación (MVI - Model-View-Intent):**
+- **ViewModel**: Debe exponer una función `handleIntent(intent: <Feature>Intent)` que procese todas las acciones de usuario.
+- **Estado Unidireccional**: El ViewModel expone un único `StateFlow<FeatureState>` que representa todo el estado de la pantalla.
+- **La UI solo reacciona al estado**: Los Composables observan el StateFlow y se recomponen cuando el estado cambia.
+- **Intenciones (Intents)**: Toda acción del usuario se modela como una sealed class/interface que representa la intención (ej. `SavePlant`, `UpdateName`, `SelectPhoto`).
+- **Estructura típica**:
+  ```kotlin
+  // DetailIntent.kt
+  sealed interface DetailIntent {
+      data class UpdateName(val name: String) : DetailIntent
+      data class UpdateFrequency(val days: Int) : DetailIntent
+      data object SavePlant : DetailIntent
+  }
+  
+  // DetailState.kt
+  data class DetailState(
+      val name: String = "",
+      val frequency: Int = 7,
+      val isLoading: Boolean = false,
+      val error: String? = null
+  )
+  
+  // DetailViewModel.kt
+  class DetailViewModel : ViewModel() {
+      private val _state = MutableStateFlow(DetailState())
+      val state: StateFlow<DetailState> = _state.asStateFlow()
+      
+      fun handleIntent(intent: DetailIntent) {
+          when (intent) {
+              is DetailIntent.UpdateName -> _state.update { it.copy(name = intent.name) }
+              is DetailIntent.SavePlant -> savePlant()
+              // ...
+          }
+      }
+  }
+  
+  // DetailScreen.kt
+  @Composable
+  fun DetailScreen(viewModel: DetailViewModel = koinViewModel()) {
+      val state by viewModel.state.collectAsStateWithLifecycle()
+      
+      DetailContent(
+          state = state,
+          onIntent = viewModel::handleIntent
+      )
+  }
+  ```
 
 # Plan: Gestión de Riego de Plantas
 
@@ -76,12 +143,16 @@
 │   │
 │   ├── /screens
 │   │   ├── /list
-│   │   │   ├── PlantListScreen.kt
-│   │   │   └── PlantListViewModel.kt
+│   │   │   ├── ListScreen.kt
+│   │   │   ├── ListViewModel.kt
+│   │   │   ├── ListState.kt
+│   │   │   └── ListIntent.kt
 │   │   │
 │   │   └── /detail
-│   │       ├── PlantDetailScreen.kt
-│   │       └── PlantDetailViewModel.kt
+│   │       ├── DetailScreen.kt
+│   │       ├── DetailViewModel.kt
+│   │       ├── DetailState.kt
+│   │       └── DetailIntent.kt
 │   │
 │   ├── /navigation
 │   │   └── AppNavigation.kt
