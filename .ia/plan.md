@@ -1,3 +1,15 @@
+## 📝 **Notas de Contexto y Desarrollo**
+> **Instrucción del desarrollador**: Cualquier decisión importante, tarea no contemplada, aclaración de ambigüedades, o cambio significativo durante el desarrollo debe ser documentado aquí para futuras sesiones.
+
+### **Decisiones de Implementación:**
+- *[Pendiente: documentar decisiones tomadas durante desarrollo]*
+
+### **Tareas Adicionales Identificadas:**
+- *[Pendiente: añadir tareas no contempladas inicialmente]*
+
+### **Aclaraciones de Ambigüedades:**
+- *[Pendiente: documentar resoluciones de puntos ambiguos]*
+
 # Plan: Gestión de Riego de Plantas
 
 **Spec de Referencia**: Spec: Gestión de Riego de Plantas (./spec.md)
