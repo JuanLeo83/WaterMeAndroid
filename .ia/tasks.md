@@ -3,7 +3,12 @@
 ---
 
 ## 🧩 Setup (Infraestructura y Configuración)
-- [ ] Crear estructura de carpetas base según `/java/com/tuempresa/plantapp`.
+- [x] Crear estructura de carpetas base según `/java/com/juanleodev/waterme`.
+- [ ] Configurar **Koin** (Inyección de Dependencias):
+  - [ ] Añadir dependencias de Koin en `build.gradle.kts`.
+  - [ ] Crear `WaterMeApplication.kt` para inicializar Koin.
+  - [ ] Crear `/di/AppModule.kt` con módulos básicos (Database, Repository).
+  - [ ] Registrar `WaterMeApplication` en `AndroidManifest.xml`.
 - [ ] Configurar `Room` (SQLite): revisar o crear `AppDatabase.kt`, `PlantDao.kt`, `Plant.kt`, `PlantRepository.kt`.
 - [ ] Configurar `WorkManager` y `NotificationHelper.kt` para recordatorios.
 - [ ] Crear `MainActivity.kt` con `setContent { AppNavigation() }`.
