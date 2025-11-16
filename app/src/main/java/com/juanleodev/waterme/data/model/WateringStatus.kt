@@ -45,6 +45,10 @@ enum class WateringStatus(
     companion object {
         /**
          * Calculate the watering status for a plant based on current date.
+         * 
+         * - HEALTHY (Green): Plant doesn't need watering yet (within schedule)
+         * - NEEDS_WATER (Orange): Today or 1-2 days overdue
+         * - OVERDUE (Red): 3 or more days overdue
          */
         fun fromPlant(plant: Plant): WateringStatus {
             val today = LocalDate.now()
@@ -53,8 +57,8 @@ enum class WateringStatus(
             
             return when {
                 daysDifference > 0 -> HEALTHY
-                daysDifference == 0L -> NEEDS_WATER
-                else -> OVERDUE
+                daysDifference >= -2 -> NEEDS_WATER  // Today (0) or 1-2 days late (-1, -2)
+                else -> OVERDUE  // 3+ days late (-3 or less)
             }
         }
     }

@@ -85,13 +85,13 @@
 **Archivos:**  
 `/ui/components/WateringStatusIndicator.kt`, `/util/WateringStatus.kt`
 
-- [ ] Crear `WateringStatusIndicator.kt` (círculo verde/naranja/rojo).
-- [ ] En `WateringStatus.kt`, definir `getStatus(lastWatering, frequency)`:
-  - [ ] Verde: dentro del plazo
-  - [ ] Naranja: hoy o retraso 1–2 días
-  - [ ] Rojo: retraso ≥3 días
-- [ ] Integrar en `PlantListItem.kt` (mostrar indicador junto al nombre).
-- [ ] Asegurar cambio dinámico del color al marcar como regada.
+- [x] Crear `WateringStatusIndicator.kt` (círculo verde/naranja/rojo).
+- [x] En `WateringStatus.kt`, definir `getStatus(lastWatering, frequency)`:
+  - [x] Verde: dentro del plazo
+  - [x] Naranja: hoy o retraso 1–2 días
+  - [x] Rojo: retraso ≥3 días
+- [x] Integrar en `PlantListItem.kt` (mostrar indicador junto al nombre).
+- [x] Asegurar cambio dinámico del color al marcar como regada.
 
 ---
 
