@@ -3,6 +3,7 @@ package com.juanleodev.waterme.ui.screens.detail
 import java.time.LocalTime
 
 sealed interface DetailIntent {
+    data class LoadPlant(val plantId: Long) : DetailIntent
     data class UpdateName(val name: String) : DetailIntent
     data class UpdateFrequency(val days: Int) : DetailIntent
     data class UpdateTime(val time: LocalTime) : DetailIntent

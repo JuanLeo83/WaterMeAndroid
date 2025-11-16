@@ -71,13 +71,13 @@
 **Archivos:**  
 `/ui/screens/detail/PlantDetailScreen.kt`, `/ui/screens/detail/PlantDetailViewModel.kt`
 
-- [ ] Reutilizar `PlantDetailScreen.kt` para modo ver/editar con `plantId` recibido.
-- [ ] Cargar datos desde `PlantRepository` y rellenar campos.
-- [ ] Mostrar texto contextual:
-  - [ ] “Último riego: Hoy” (0 días)
-  - [ ] “Ayer” (1 día)
-  - [ ] “Hace X días” (>1 día)
-- [ ] Guardar cambios en planta existente.
+- [x] Reutilizar `PlantDetailScreen.kt` para modo ver/editar con `plantId` recibido.
+- [x] Cargar datos desde `PlantRepository` y rellenar campos.
+- [x] Mostrar texto contextual:
+  - [x] "Último riego: Hoy" (0 días)
+  - [x] "Ayer" (1 día)
+  - [x] "Hace X días" (>1 día)
+- [x] Guardar cambios en planta existente.
 
 ---
 

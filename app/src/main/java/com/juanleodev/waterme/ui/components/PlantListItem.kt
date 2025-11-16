@@ -50,10 +50,12 @@ fun PlantListItem(
     plant: Plant,
     status: WateringStatus,
     onWaterClick: (Long) -> Unit,
+    onClick: (Long) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
+        onClick = { onClick(plant.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface

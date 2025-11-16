@@ -10,6 +10,9 @@
     <string name="last_watering_label">Last Watering</string>
     <string name="last_watering_hint">Days ago (0 = today)</string>
     <string name="save_plant">Save Plant</string>
+    <string name="add_plant_title">Add New Plant</string>
+    <string name="edit_plant_title">Edit Plant</string>
+    <string name="last_watering_display">Último riego: %1$s</string>
     
     <!-- Photo picker -->
     <string name="add_photo_optional">Add Photo (Optional)</string>

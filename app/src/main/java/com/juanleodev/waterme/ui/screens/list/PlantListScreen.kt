@@ -73,6 +73,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PlantListScreen(
     onAddPlantClick: () -> Unit,
+    onPlantClick: (Long) -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: PlantListViewModel = koinViewModel()
 ) {
@@ -218,6 +219,7 @@ fun PlantListScreen(
                 onWaterPlant = { plantId ->
                     viewModel.handleEvent(PlantListEvent.WaterPlant(plantId))
                 },
+                onPlantClick = onPlantClick,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -231,6 +233,7 @@ fun PlantListScreen(
 private fun PlantListContent(
     uiState: PlantListUiState,
     onWaterPlant: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
@@ -246,6 +249,7 @@ private fun PlantListContent(
             PlantList(
                 plants = uiState.plants,
                 onWaterPlant = onWaterPlant,
+                onPlantClick = onPlantClick,
                 modifier = modifier
             )
         }
@@ -317,6 +321,7 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
 private fun PlantList(
     plants: List<PlantWithStatus>,
     onWaterPlant: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -332,6 +337,7 @@ private fun PlantList(
                 plant = plantWithStatus.plant,
                 status = plantWithStatus.status,
                 onWaterClick = onWaterPlant,
+                onClick = onPlantClick,
                 modifier = Modifier.fillMaxWidth()
             )
         }

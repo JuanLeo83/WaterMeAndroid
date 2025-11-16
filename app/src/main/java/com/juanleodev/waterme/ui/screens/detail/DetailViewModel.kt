@@ -25,6 +25,7 @@ class DetailViewModel(
 
     fun handleIntent(intent: DetailIntent) {
         when (intent) {
+            is DetailIntent.LoadPlant -> loadPlant(intent.plantId)
             is DetailIntent.UpdateName -> updateName(intent.name)
             is DetailIntent.UpdateFrequency -> updateFrequency(intent.days)
             is DetailIntent.UpdateTime -> updateTime(intent.time)
@@ -47,6 +48,51 @@ class DetailViewModel(
 
     private fun selectPhoto(photoUri: String?) {
         _state.update { it.copy(photoUri = photoUri) }
+    }
+
+    private fun loadPlant(plantId: Long) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            
+            try {
+                val plant = repository.getPlantById(plantId)
+                if (plant != null) {
+                    val lastWateringText = getLastWateringText(plant.lastWateringDate)
+                    
+                    _state.update {
+                        it.copy(
+                            plantId = plant.id,
+                            name = plant.name,
+                            photoUri = plant.photoUri,
+                            frequency = plant.wateringFrequencyDays,
+                            reminderTime = plant.reminderTime,
+                            lastWateringDate = plant.lastWateringDate,
+                            lastWateringText = lastWateringText,
+                            isEditMode = true,
+                            isLoading = false
+                        )
+                    }
+                } else {
+                    _state.update { it.copy(isLoading = false) }
+                }
+            } catch (e: Exception) {
+                _state.update { 
+                    it.copy(
+                        isLoading = false,
+                        nameError = R.string.error_loading_plants
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getLastWateringText(lastWateringDate: java.time.LocalDate): String {
+        val daysSince = java.time.temporal.ChronoUnit.DAYS.between(lastWateringDate, java.time.LocalDate.now()).toInt()
+        return when (daysSince) {
+            0 -> "Hoy"
+            1 -> "Ayer"
+            else -> "Hace $daysSince días"
+        }
     }
 
     private fun savePlant() {
@@ -78,18 +124,33 @@ class DetailViewModel(
 
         viewModelScope.launch {
             try {
-                // For new plants, default to today as last watering date
-                val lastWateringDate = LocalDate.now()
-                
-                val plant = Plant(
-                    name = currentState.name.trim(),
-                    photoUri = currentState.photoUri,
-                    wateringFrequencyDays = currentState.frequency,
-                    reminderTime = currentState.reminderTime,
-                    lastWateringDate = lastWateringDate
-                )
-                
-                repository.insertPlant(plant)
+                if (currentState.isEditMode) {
+                    // Update existing plant
+                    val plant = Plant(
+                        id = currentState.plantId,
+                        name = currentState.name.trim(),
+                        photoUri = currentState.photoUri,
+                        wateringFrequencyDays = currentState.frequency,
+                        reminderTime = currentState.reminderTime,
+                        lastWateringDate = currentState.lastWateringDate
+                    )
+                    
+                    repository.updatePlant(plant)
+                } else {
+                    // Insert new plant
+                    // For new plants, default to today as last watering date
+                    val lastWateringDate = LocalDate.now()
+                    
+                    val plant = Plant(
+                        name = currentState.name.trim(),
+                        photoUri = currentState.photoUri,
+                        wateringFrequencyDays = currentState.frequency,
+                        reminderTime = currentState.reminderTime,
+                        lastWateringDate = lastWateringDate
+                    )
+                    
+                    repository.insertPlant(plant)
+                }
                 
                 _state.update { 
                     it.copy(

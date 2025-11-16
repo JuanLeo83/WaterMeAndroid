@@ -47,10 +47,12 @@ fun PlantDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     
-    // Reset ViewModel state for new plants
+    // Load plant data for editing or reset for new plant
     LaunchedEffect(plantId) {
         if (plantId == -1L) {
             viewModel.resetForNewPlant()
+        } else {
+            viewModel.handleIntent(DetailIntent.LoadPlant(plantId))
         }
     }
     
@@ -90,7 +92,10 @@ private fun PlantDetailContent(
             ) {
                 // Title
                 Text(
-                    text = "Add New Plant", // TODO: Change to "Edit Plant" when editing
+                    text = if (state.isEditMode) 
+                        stringResource(R.string.edit_plant_title) 
+                    else 
+                        stringResource(R.string.add_plant_title),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -145,6 +150,15 @@ private fun PlantDetailContent(
                     selectedTime = state.reminderTime,
                     onTimeSelected = { onIntent(DetailIntent.UpdateTime(it)) }
                 )
+                
+                // Last Watering (only shown in edit mode)
+                if (state.isEditMode) {
+                    Text(
+                        text = stringResource(R.string.last_watering_display, state.lastWateringText),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 
                 // TODO: Last Watering Field will be shown only in edit mode
                 // For now, we'll use default value of "0" (today) for new plants

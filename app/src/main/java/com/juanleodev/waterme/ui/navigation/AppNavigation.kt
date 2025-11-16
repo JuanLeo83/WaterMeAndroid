@@ -25,6 +25,9 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
             PlantListScreen(
                 onAddPlantClick = {
                     navController.navigate(Routes.PlantDetail.createRoute())
+                },
+                onPlantClick = { plantId ->
+                    navController.navigate(Routes.PlantDetail.createRoute(plantId))
                 }
             )
         }
