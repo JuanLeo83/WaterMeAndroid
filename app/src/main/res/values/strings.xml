@@ -67,4 +67,12 @@
     <string name="watering_status_healthy_desc">No necesita riego aún</string>
     <string name="watering_status_needs_water_desc">Necesita ser regada</string>
     <string name="watering_status_overdue_desc">Debería haber sido regada</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_name">Watering Reminders</string>
+    <string name="notification_channel_description">Notifications to remind you to water your plants</string>
+    <string name="notification_title">Time to water %1$s</string>
+    <string name="notification_message">Your plant needs watering today</string>
+    <string name="notification_message_overdue">Your plant is %1$d days overdue for watering</string>
+    <string name="notification_action_water">Mark as Watered</string>
 </resources>

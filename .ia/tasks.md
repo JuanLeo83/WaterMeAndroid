@@ -55,15 +55,15 @@
 
 ---
 
-## 🔔 Historia 3: Recibir un recordatorio de riego
+## 🔔 Historia 3: Recibir un recordatorio de riego ✅ COMPLETADA
 **Archivos:**  
-`/service/WateringReminderWorker.kt`, `/service/NotificationHelper.kt`
+`/service/WateringReminderWorker.kt`, `/service/NotificationHelper.kt`, `/service/WaterPlantReceiver.kt`
 
-- [ ] Configurar `WorkManager` para tarea diaria que consulte `PlantRepository`.
-- [ ] Implementar lógica: si `today == nextWateringDate`, enviar notificación.
-- [ ] Repetir notificación si hay retraso (hasta que se marque como regada).
-- [ ] Añadir permisos y canal de notificaciones en `AndroidManifest.xml`.
-- [ ] Probar flujo completo: crear planta → esperar día → recibir notificación.
+- [x] Configurar `WorkManager` para tarea diaria que consulte `PlantRepository`.
+- [x] Implementar lógica: si `today == nextWateringDate`, enviar notificación.
+- [x] Repetir notificación si hay retraso (hasta que se marque como regada).
+- [x] Añadir permisos y canal de notificaciones en `AndroidManifest.xml`.
+- [x] Probar flujo completo: crear planta → esperar día → recibir notificación.
 
 ---
 

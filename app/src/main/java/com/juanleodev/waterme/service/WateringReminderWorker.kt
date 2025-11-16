@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.juanleodev.waterme.data.PlantRepository
+import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.LocalDate
@@ -11,6 +12,13 @@ import java.time.LocalDate
 /**
  * Worker for checking plants that need watering and sending notifications.
  * This worker runs daily to check if any plants need to be watered.
+ * 
+ * Logic:
+ * - Runs once per day (configured in WaterMeApplication)
+ * - Gets all plants from the repository
+ * - For each plant, checks if today >= nextWateringDate
+ * - If yes, sends a notification
+ * - Notifications will repeat daily until the plant is marked as watered
  */
 class WateringReminderWorker(
     context: Context,
@@ -22,16 +30,31 @@ class WateringReminderWorker(
     
     override suspend fun doWork(): Result {
         return try {
-            // TODO: Implement full logic in Historia 3
-            // For now, this is a basic structure
+            // Get all plants
+            val plants = plantRepository.allPlants.first()
             
-            // Get all plants (this will be a Flow, we'll need to collect it)
-            // Check which plants need watering today
-            // Send notifications for those plants
+            val today = LocalDate.now()
+            
+            // Check each plant to see if it needs watering
+            plants.forEach { plant ->
+                val nextWateringDate = plant.getNextWateringDate()
+                
+                // If today is on or after the next watering date, send notification
+                if (!today.isBefore(nextWateringDate)) {
+                    notificationHelper.sendWateringReminder(
+                        plantId = plant.id,
+                        plantName = plant.name,
+                        lastWateringDate = plant.lastWateringDate,
+                        nextWateringDate = nextWateringDate
+                    )
+                }
+            }
             
             Result.success()
         } catch (e: Exception) {
-            Result.failure()
+            // Log the error and retry
+            e.printStackTrace()
+            Result.retry()
         }
     }
     
