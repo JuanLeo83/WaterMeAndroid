@@ -96,8 +96,8 @@
 ---
 
 ## ⚙️ Extras (Cross-cutting / UX)
-- [ ] Mostrar aviso en `PlantListScreen.kt` si no hay permisos de notificación (abrir configuración).
-- [ ] Añadir `EmptyState` composable si no hay plantas registradas.
-- [ ] Implementar `AppTheme` global con colores consistentes (`Theme.kt`).
+- [x] Mostrar aviso en `PlantListScreen.kt` si no hay permisos de notificación (abrir configuración).
+- [x] Añadir `EmptyState` composable si no hay plantas registradas.
+- [x] Implementar `AppTheme` global con colores consistentes (`Theme.kt`).
 
 ---
