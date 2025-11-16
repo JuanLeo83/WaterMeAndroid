@@ -1,5 +1,12 @@
 package com.juanleodev.waterme.ui.screens.list
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,18 +30,28 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.juanleodev.waterme.R
+import com.juanleodev.waterme.ui.components.NotificationPermissionBanner
+import com.juanleodev.waterme.ui.components.NotificationPermissionState
 import com.juanleodev.waterme.ui.components.PlantListItem
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,6 +64,8 @@ import org.koin.androidx.compose.koinViewModel
  * - Allows watering plants with a button
  * - Provides navigation to add new plants
  * - Handles loading and error states
+ * - Requests notification permissions if not granted
+ * - Shows permanent warning banner if permissions are denied
  * 
  * Following MVI pattern with PlantListViewModel.
  */
@@ -61,6 +80,78 @@ fun PlantListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    
+    // Track notification permission state
+    var hasNotificationPermission by remember { mutableStateOf(false) }
+    var hasUserDismissedBanner by remember { mutableStateOf(false) }
+    var permissionDeniedPermanently by remember { mutableStateOf(false) }
+    
+    // Function to check notification permission
+    fun checkNotificationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PermissionChecker.PERMISSION_GRANTED
+        } else {
+            true // Permissions not needed for Android < 13
+        }
+    }
+    
+    // Check permission on first composition
+    LaunchedEffect(Unit) {
+        hasNotificationPermission = checkNotificationPermission()
+    }
+    
+    // Re-check permission when returning from settings
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasNotificationPermission = checkNotificationPermission()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+    
+    // Permission launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasNotificationPermission = isGranted
+        if (!isGranted) {
+            // Permission was denied - mark as permanently denied for UI purposes
+            permissionDeniedPermanently = true
+        }
+    }
+    
+    // Function to handle permission request or open settings
+    fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (permissionDeniedPermanently) {
+                // Open app settings
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", context.packageName, null)
+                }
+                context.startActivity(intent)
+            } else {
+                // Try to request permission
+                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+    
+    // Determine banner state
+    val showBanner = !hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    val bannerState = when {
+        !hasNotificationPermission && permissionDeniedPermanently -> NotificationPermissionState.DENIED
+        !hasNotificationPermission && hasUserDismissedBanner -> NotificationPermissionState.DENIED
+        !hasNotificationPermission && !hasUserDismissedBanner -> NotificationPermissionState.NOT_REQUESTED
+        else -> null
+    }
     
     // Handle error messages
     LaunchedEffect(uiState.error) {
@@ -102,15 +193,34 @@ fun PlantListScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
-        PlantListContent(
-            uiState = uiState,
-            onWaterPlant = { plantId ->
-                viewModel.handleEvent(PlantListEvent.WaterPlant(plantId))
-            },
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-        )
+        ) {
+            // Notification permission banner
+            bannerState?.let { state ->
+                NotificationPermissionBanner(
+                    visible = showBanner,
+                    state = state,
+                    onActionClick = {
+                        requestNotificationPermission()
+                    },
+                    onDismissClick = {
+                        hasUserDismissedBanner = true
+                    }
+                )
+            }
+            
+            // Main content
+            PlantListContent(
+                uiState = uiState,
+                onWaterPlant = { plantId ->
+                    viewModel.handleEvent(PlantListEvent.WaterPlant(plantId))
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 

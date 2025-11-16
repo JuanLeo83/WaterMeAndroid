@@ -75,4 +75,13 @@
     <string name="notification_message">Your plant needs watering today</string>
     <string name="notification_message_overdue">Your plant is %1$d days overdue for watering</string>
     <string name="notification_action_water">Mark as Watered</string>
+    
+    <!-- Notification permissions -->
+    <string name="notification_permission_title">Enable notifications</string>
+    <string name="notification_permission_message">Get reminders when your plants need watering</string>
+    <string name="notification_permission_enable">Enable</string>
+    <string name="notification_permission_dismiss">Not now</string>
+    <string name="notification_permission_denied_title">Notifications disabled</string>
+    <string name="notification_permission_denied_message">You won\'t receive watering reminders without notifications enabled</string>
+    <string name="notification_permission_open_settings">Open Settings</string>
 </resources>
